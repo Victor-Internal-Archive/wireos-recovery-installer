@@ -6,6 +6,7 @@ cd vector-gobot
 GCC="${HOME}/.anki/vicos-sdk/dist/5.3.0-r07/prebuilt/bin/arm-oe-linux-gnueabi-clang" \
 GPP="${HOME}/.anki/vicos-sdk/dist/5.3.0-r07/prebuilt/bin/arm-oe-linux-gnueabi-clang++" \
 make vector-gobot
+cp build/libvector-gobot.so ../
 cd ..
 
 #make wired
