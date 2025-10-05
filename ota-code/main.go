@@ -247,8 +247,8 @@ func main() {
 	updateTotalPercentageRange(0, 100)
 	updateTotalPercentage(0)
 
-	dump("Writing Recovery", "/data/recovery.img.gz", "/dev/block/bootdevice/by-name/recoveryfs", 0, 8)
-	dump("Writing RecoveryFS", "/data/recoveryfs.img.gz", "/dev/block/bootdevice/by-name/recoveryfs", 9, 100)
+	dump("Writing Recovery", "/anki/recovery.img.gz", "/dev/block/bootdevice/by-name/recoveryfs", 0, 8)
+	dump("Writing RecoveryFS", "/anki/recoveryfs.img.gz", "/dev/block/bootdevice/by-name/recoveryfs", 9, 100)
 	
 	go func() {
 		for range stoppedChan {
