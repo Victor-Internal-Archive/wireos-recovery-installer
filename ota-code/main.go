@@ -150,28 +150,29 @@ func displayRenderer() {
 }
 
 func sizeOfGzipContents(zippy string) int {
-	zipOut, err := exec.Command("/usr/bin/pigz", "-l", zippy).Output()
-	if err != nil {
-		fmt.Println("sizeOfGzipContents err:", err)
-		return 0
-	}
-	zipOutToParse := string(zipOut)
-	lines := strings.Split(zipOutToParse, "\n")
-	for _, line := range lines {
-		fields := strings.Fields(line)
-		if len(fields) >= 3 && fields[1] != "original" {
-			size, err := strconv.ParseInt(fields[1], 10, 64)
-			if err != nil {
-				fmt.Println("int conv error in sizeOfGzipContents: ", err)
-				return 0
-			}
-			fmt.Println(int(size))
-			return int(size)
-		}
-	}
-	fmt.Println("hmm error: ", zipOutToParse)
-	return 0
-
+    file, err := os.Open(zippy)
+    if err != nil {
+        fmt.Println("sizeOfGzipContents open err:", err)
+        return 0
+    }
+    defer file.Close()
+    
+    _, err = file.Seek(-4, io.SeekEnd)
+    if err != nil {
+        fmt.Println("sizeOfGzipContents seek err:", err)
+        return 0
+    }
+    
+    buf := make([]byte, 4)
+    _, err = file.Read(buf)
+    if err != nil {
+        fmt.Println("sizeOfGzipContents read err:", err)
+        return 0
+    }
+    
+    size := int(buf[0]) | int(buf[1])<<8 | int(buf[2])<<16 | int(buf[3])<<24
+    fmt.Println(size)
+    return size
 }
 
 func dump(status, zip, dest string, percentageRangeStart, percentageRangeEnd int) {
@@ -179,7 +180,7 @@ func dump(status, zip, dest string, percentageRangeStart, percentageRangeEnd int
 	updateTotalPercentageRange(percentageRangeStart, percentageRangeEnd)
 	var outputted int
 	gzipSize := sizeOfGzipContents(zip)
-	ifDD := exec.Command("/usr/bin/pigz", "-dc", zip)
+	ifDD := exec.Command("/usr/bin/gzip", "-dc", zip)
 	ofDD := exec.Command("/usr/bin/dd", "of="+dest)
 	rc, err := ifDD.StdoutPipe()
 	if err != nil {
@@ -247,7 +248,7 @@ func main() {
 	updateTotalPercentageRange(0, 100)
 	updateTotalPercentage(0)
 
-	dump("Writing Recovery", "/anki/recovery.img.gz", "/dev/block/bootdevice/by-name/recoveryfs", 0, 8)
+	dump("Writing Recovery", "/anki/recovery.img.gz", "/dev/block/bootdevice/by-name/recovery", 0, 8)
 	dump("Writing RecoveryFS", "/anki/recoveryfs.img.gz", "/dev/block/bootdevice/by-name/recoveryfs", 9, 100)
 	
 	go func() {
