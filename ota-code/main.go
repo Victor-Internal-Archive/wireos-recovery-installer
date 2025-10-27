@@ -137,7 +137,7 @@ func displayRenderer() {
 			Color: color.RGBA{R: 255, G: 255, B: 255, A: 255},
 		})
 		lines = append(lines, vscreen.Line{
-			Text:  "Total progress:",
+			Text:  "Unlocking progress:",
 			Color: color.RGBA{R: 255, G: 255, B: 255, A: 255},
 		})
 		lines = append(lines, vscreen.Line{
@@ -244,21 +244,26 @@ func main() {
 	go displayRenderer()
 	time.Sleep(time.Millisecond * 50)
 	updateStatus("Starting...")
+	time.Sleep(time.Millisecond * 3000)
 	updateCurrentPercentage(0)
 	updateTotalPercentageRange(0, 100)
 	updateTotalPercentage(0)
 
-	dump("Writing Recovery", "/anki/recovery.img.gz", "/dev/block/bootdevice/by-name/recovery", 0, 8)
+	dump("Writing ABOOT", "/anki/ankidev-signed.img.gz", "/dev/block/bootdevice/by-name/aboot", 0, 3)
+	time.Sleep(time.Millisecond * 1000)
+	dump("Writing Recovery", "/anki/recovery.img.gz", "/dev/block/bootdevice/by-name/recovery", 4, 8)
 	dump("Writing RecoveryFS", "/anki/recoveryfs.img.gz", "/dev/block/bootdevice/by-name/recoveryfs", 9, 100)
 	
-	go func() {
-		for range stoppedChan {
+	//go func() {
+	//	for range stoppedChan {
 			// reboot here
+			updateStatus("Rebooting...")
+			time.Sleep(time.Millisecond * 1000)
 			os.Exit(0)
-		}
-	}()
-	select {
-	case stopChan <- true:
-	default:
-	}
+	//	}
+	//}()
+	//select {
+	//case stoppedChan <- true:
+	//default:
+	//}
 }
