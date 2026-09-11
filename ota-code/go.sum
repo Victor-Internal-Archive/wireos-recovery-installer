@@ -1,3 +1,5 @@
+github.com/kercre123/vector-gobot v1.3.2 h1:ZzzoQ9M8jzor2JZVShdzikvx+3kow7sJOHMOgTZMR+g=
+github.com/kercre123/vector-gobot v1.3.2/go.mod h1:pyNnNrjiA7vgnb9yU0q4D7jpNKipkdWD9i0NNFTOuvY=
 github.com/os-vector/vector-gobot v1.0.0 h1:nb7W1M1j4bYxusNeDs4J4urM2G2fJv3rWoYwpGjMQ1o=
 github.com/os-vector/vector-gobot v1.0.0/go.mod h1:QfBvg9/2YZDoBySGuwjFk4XqtQmiTmrQsHv8lxUQnSY=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=

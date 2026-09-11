@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/os-vector/vector-gobot/pkg/vbody"
 	"github.com/os-vector/vector-gobot/pkg/vscreen"
 )
 
@@ -150,29 +151,29 @@ func displayRenderer() {
 }
 
 func sizeOfGzipContents(zippy string) int {
-    file, err := os.Open(zippy)
-    if err != nil {
-        fmt.Println("sizeOfGzipContents open err:", err)
-        return 0
-    }
-    defer file.Close()
-    
-    _, err = file.Seek(-4, io.SeekEnd)
-    if err != nil {
-        fmt.Println("sizeOfGzipContents seek err:", err)
-        return 0
-    }
-    
-    buf := make([]byte, 4)
-    _, err = file.Read(buf)
-    if err != nil {
-        fmt.Println("sizeOfGzipContents read err:", err)
-        return 0
-    }
-    
-    size := int(buf[0]) | int(buf[1])<<8 | int(buf[2])<<16 | int(buf[3])<<24
-    fmt.Println(size)
-    return size
+	file, err := os.Open(zippy)
+	if err != nil {
+		fmt.Println("sizeOfGzipContents open err:", err)
+		return 0
+	}
+	defer file.Close()
+
+	_, err = file.Seek(-4, io.SeekEnd)
+	if err != nil {
+		fmt.Println("sizeOfGzipContents seek err:", err)
+		return 0
+	}
+
+	buf := make([]byte, 4)
+	_, err = file.Read(buf)
+	if err != nil {
+		fmt.Println("sizeOfGzipContents read err:", err)
+		return 0
+	}
+
+	size := int(buf[0]) | int(buf[1])<<8 | int(buf[2])<<16 | int(buf[3])<<24
+	fmt.Println(size)
+	return size
 }
 
 func dump(status, zip, dest string, percentageRangeStart, percentageRangeEnd int) {
@@ -244,7 +245,24 @@ func main() {
 	go displayRenderer()
 	time.Sleep(time.Millisecond * 50)
 	updateStatus("Starting...")
-	time.Sleep(time.Millisecond * 3000)
+
+	vbody.ReadOnly = true
+	vbody.InitSpine()
+	fchan := vbody.GetFrameChan()
+
+	for frame := range fchan {
+		if float64(frame.ChargerVoltage) < 3.4 {
+			updateStatus("Put Vector on Charger!")
+			time.Sleep(time.Millisecond * 2000)
+			updateStatus("Try different bricks!")
+			time.Sleep(time.Millisecond * 2000)
+		} else {
+			updateStatus("Continuing...")
+			time.Sleep(time.Millisecond * 1000)
+			break
+		}
+	}
+
 	updateCurrentPercentage(0)
 	updateTotalPercentageRange(0, 100)
 	updateTotalPercentage(0)
@@ -253,13 +271,13 @@ func main() {
 	time.Sleep(time.Millisecond * 1000)
 	dump("Writing Recovery", "/anki/recovery.img.gz", "/dev/block/bootdevice/by-name/recovery", 4, 8)
 	dump("Writing RecoveryFS", "/anki/recoveryfs.img.gz", "/dev/block/bootdevice/by-name/recoveryfs", 9, 100)
-	
+
 	//go func() {
 	//	for range stoppedChan {
-			// reboot here
-			updateStatus("Rebooting...")
-			time.Sleep(time.Millisecond * 1000)
-			os.Exit(0)
+	// reboot here
+	updateStatus("Rebooting...")
+	time.Sleep(time.Millisecond * 1000)
+	os.Exit(0)
 	//	}
 	//}()
 	//select {
