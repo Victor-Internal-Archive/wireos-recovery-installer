@@ -268,7 +268,6 @@ func main() {
 	updateTotalPercentage(0)
 
 	dump("Writing ABOOT", "/anki/ankidev-signed.img.gz", "/dev/block/bootdevice/by-name/aboot", 0, 3)
-	time.Sleep(time.Millisecond * 1000)
 	dump("Writing Recovery", "/anki/recovery.img.gz", "/dev/block/bootdevice/by-name/recovery", 4, 8)
 	dump("Writing RecoveryFS", "/anki/recoveryfs.img.gz", "/dev/block/bootdevice/by-name/recoveryfs", 9, 100)
 
