@@ -2,5 +2,6 @@
 /ota-code/main
 /ota-code/oe-logs
 /ota-code/oe-workdir
+/ankidev-signed.img.gz
 /recovery.img.gz
 /recoveryfs.img.gz
