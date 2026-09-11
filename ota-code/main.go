@@ -270,16 +270,16 @@ func main() {
 	dump("Writing Recovery", "/anki/recovery.img.gz", "/dev/block/bootdevice/by-name/recovery", 0, 8)
 	dump("Writing RecoveryFS", "/anki/recoveryfs.img.gz", "/dev/block/bootdevice/by-name/recoveryfs", 9, 100)
 
-	go func() {
-		for range stoppedChan {
-			// reboot here
-			updateStatus("Rebooting...")
-			time.Sleep(time.Millisecond * 1000)
-			os.Exit(0)
-		}
-	}()
-	select {
-	case stopChan <- true:
-	default:
-	}
+	// go func() {
+	// 	for range stoppedChan {
+	// reboot here
+	updateStatus("Rebooting...")
+	time.Sleep(time.Millisecond * 1000)
+	os.Exit(0)
+	// 	}
+	// }()
+	// select {
+	// case stopChan <- true:
+	// default:
+	// }
 }
