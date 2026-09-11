@@ -273,6 +273,8 @@ func main() {
 	go func() {
 		for range stoppedChan {
 			// reboot here
+			updateStatus("Rebooting...")
+			time.Sleep(time.Millisecond * 1000)
 			os.Exit(0)
 		}
 	}()
