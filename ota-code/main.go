@@ -138,7 +138,7 @@ func displayRenderer() {
 			Color: color.RGBA{R: 255, G: 255, B: 255, A: 255},
 		})
 		lines = append(lines, vscreen.Line{
-			Text:  "Total progress:",
+			Text:  "Relock progress:",
 			Color: color.RGBA{R: 255, G: 255, B: 255, A: 255},
 		})
 		lines = append(lines, vscreen.Line{

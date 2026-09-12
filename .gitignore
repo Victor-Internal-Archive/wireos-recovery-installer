@@ -3,5 +3,6 @@
 /ota-code/oe-logs
 /ota-code/oe-workdir
 /ankidev-signed.img.gz
+/ankiprod.img.gz
 /recovery.img.gz
 /recoveryfs.img.gz
